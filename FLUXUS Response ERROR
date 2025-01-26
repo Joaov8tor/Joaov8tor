@@ -1,5 +1,88 @@
-{error:key invalid hwid/link} {fluxus website}
-127.0.0.1       localhost
-::1             ip6-localhost
-193.84.88.132 keysystem.fluxteam.net
-193.84.88.132 fluxteam.net
+local player = game.Players.LocalPlayer
+local gui = Instance.new("ScreenGui")
+local frame = Instance.new("Frame")
+local textBox = Instance.new("TextBox")
+local speedButton = Instance.new("TextButton")
+local jumpButton = Instance.new("TextButton")
+local teleportButton = Instance.new("TextButton")
+local toggleButton = Instance.new("TextButton")
+local isOpen = false
+
+-- Configurações do painel
+gui.Parent = player:WaitForChild("PlayerGui")
+frame.Size = UDim2.new(0, 300, 0, 200)
+frame.Position = UDim2.new(0.5, -150, 0.5, -100)
+frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+frame.Visible = false
+frame.Parent = gui
+
+-- Configurações da TextBox
+textBox.Size = UDim2.new(0, 200, 0, 50)
+textBox.Position = UDim2.new(0, 50, 0, 20)
+textBox.PlaceholderText = "Digite o Nick ou ID"
+textBox.Parent = frame
+
+-- Botão para aumentar a velocidade
+speedButton.Size = UDim2.new(0, 100, 0, 50)
+speedButton.Position = UDim2.new(0, 50, 0, 80)
+speedButton.Text = "Aumentar Velocidade"
+speedButton.Parent = frame
+
+-- Botão para aumentar o pulo
+jumpButton.Size = UDim2.new(0, 100, 0, 50)
+jumpButton.Position = UDim2.new(0, 150, 0, 80)
+jumpButton.Text = "Aumentar Pulo"
+jumpButton.Parent = frame
+
+-- Botão para teleportar
+teleportButton.Size = UDim2.new(0, 100, 0, 50)
+teleportButton.Position = UDim2.new(0, 50, 0, 140)
+teleportButton.Text = "Teleportar"
+teleportButton.Parent = frame
+
+-- Botão para abrir/fechar painel
+toggleButton.Size = UDim2.new(0, 100, 0, 50)
+toggleButton.Position = UDim2.new(0, 150, 0, 140)
+toggleButton.Text = "Abrir/Fechar"
+toggleButton.Parent = frame
+
+-- Função para aumentar a velocidade
+local function aumentarVelocidade()
+    local playerName = textBox.Text
+    local targetPlayer = game.Players:FindFirstChild(playerName)
+
+    if targetPlayer and targetPlayer.Character then
+        targetPlayer.Character:WaitForChild("Humanoid").WalkSpeed = 100 -- Alterar conforme necessário
+    end
+end
+
+-- Função para aumentar o pulo
+local function aumentarPulo()
+    local playerName = textBox.Text
+    local targetPlayer = game.Players:FindFirstChild(playerName)
+
+    if targetPlayer and targetPlayer.Character then
+        targetPlayer.Character:WaitForChild("Humanoid").JumpPower = 100 -- Alterar conforme necessário
+    end
+end
+
+-- Função para teleportar
+local function teleportar()
+    local playerName = textBox.Text
+    local targetPlayer = game.Players:FindFirstChild(playerName)
+
+    if targetPlayer and targetPlayer.Character then
+        player.Character:SetPrimaryPartCFrame(targetPlayer.Character.PrimaryPart.CFrame)
+    end
+end
+
+-- Alternar visibilidade do painel
+toggleButton.MouseButton1Click:Connect(function()
+    isOpen = not isOpen
+    frame.Visible = isOpen
+end)
+
+-- Conectar botões às funções
+speedButton.MouseButton1Click:Connect(aumentarVelocidade)
+jumpButton.MouseButton1Click:Connect(aumentarPulo)
+teleportButton.MouseButton1Click:Connect(teleportar)
