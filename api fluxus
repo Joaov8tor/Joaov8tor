@@ -1,0 +1,25 @@
+const axios = require('axios');
+
+module.exports = async (req, res) => {
+  const fluxusUrl = req.query.url;
+
+  if (!fluxusUrl) {
+    return res.status(400).json({ error: 'URL is required' });
+  }
+
+  try {
+    const response = await axios.get(`http://helya.pylex.xyz:10234/api/addlink?url=${fluxusUrl}`);
+    if (response.data && response.data.status === 'success' && response.data.result) {
+      res.json({
+        key: response.data.result.key,
+        url: response.data.result.url
+      });
+    } else {
+      res.status(500).json({ error: 'Failed to bypass the URL' });
+    }
+  } catch (error) {
+    console.error('Erro no bypass:', error);
+    res.status(500).json({ error: 'Failed to contact bypass API' });
+  }
+};
+
